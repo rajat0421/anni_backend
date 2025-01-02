@@ -39,13 +39,14 @@ const io = new Server(server, {
     },
     methods: ["GET", "POST"],
     credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type'], // Only allow necessary headers
   },
   transports: ['polling', 'websocket'],
   path: '/socket.io/',
   pingTimeout: 60000,
   pingInterval: 25000
 });
+
 
 // Parse JSON requests
 app.use(express.json());
