@@ -77,7 +77,7 @@ app.use(async (req, res, next) => {
   };
 
   try {
-    if (client.isConnected()) {
+    if (client && client.topology && client.topology.isConnected()) {
       const database = client.db('chatapp');
       const logs = database.collection('access_logs');
       await logs.insertOne(log);
@@ -90,6 +90,7 @@ app.use(async (req, res, next) => {
     next();
   }
 });
+
 
 
 // Socket.IO connection handling
