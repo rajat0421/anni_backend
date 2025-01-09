@@ -22,7 +22,7 @@ app.use(cors({
     }
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type'],
   credentials: true,
   optionsSuccessStatus: 204
 }));
@@ -41,10 +41,10 @@ const io = new Server(server, {
     credentials: true,
     allowedHeaders: ['Content-Type'], // Only allow necessary headers
   },
-  transports: ['polling', 'websocket'],
+  transports: ['websocket','polling'],
   path: '/socket.io/',
   pingTimeout: 60000,
-  pingInterval: 25000
+  pingInterval: 25000,
 });
 
 
