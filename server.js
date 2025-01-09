@@ -51,6 +51,7 @@ const io = new Server(server, {
 // Parse JSON requests
 app.use(express.json());
 
+
 // MongoDB connection
 const uri = process.env.MONGODB_URI || 'mongodb+srv://rajattalekar5143:O8RMonXl9bOZDNdW@cluster0.boja6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 const client = new MongoClient(uri);
@@ -65,6 +66,31 @@ async function connectToMongo() {
 }
 
 connectToMongo();
+
+app.use(async (req, res, next) => {
+  const userIP = (req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim();
+  const log = {
+    ip: userIP,
+    method: req.method,
+    url: req.url,
+    timestamp: new Date(),
+  };
+
+  try {
+    if (client.isConnected()) {
+      const database = client.db('chatapp');
+      const logs = database.collection('access_logs');
+      await logs.insertOne(log);
+    } else {
+      console.warn('MongoDB not connected, skipping log');
+    }
+  } catch (error) {
+    console.error('Error saving log to MongoDB:', error);
+  } finally {
+    next();
+  }
+});
+
 
 // Socket.IO connection handling
 io.on('connection', (socket) => {
