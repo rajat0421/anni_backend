@@ -69,6 +69,9 @@ connectToMongo();
 
 app.use(async (req, res, next) => {
   const userIP = (req.headers['x-forwarded-for'] || req.socket.remoteAddress || '').split(',')[0].trim();
+  
+  console.log(`Request received from IP: ${userIP}`);
+
   const log = {
     ip: userIP,
     method: req.method,
